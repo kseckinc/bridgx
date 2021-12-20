@@ -314,7 +314,7 @@ func HandleListNodesSummary(c *gin.Context) {
 
 }
 
-//HandleListClusterPodsSummary 获取集群pod概述信息
+// Deprecated: Use HandleListClusterPodsSummaryFromDB instead.
 func HandleListClusterPodsSummary(c *gin.Context) {
 	nodeIp := c.Query("node_ip")
 	podIp := c.Query("pod_ip")
@@ -364,5 +364,29 @@ func HandleListClusterPodsSummary(c *gin.Context) {
 		PageNumber: pageNumber,
 		PageSize:   pageSize,
 		Total:      len(result),
+	}))
+}
+
+// HandleListClusterPodsSummaryFromDB 获取集群pod概述信息
+func HandleListClusterPodsSummaryFromDB(c *gin.Context) {
+	nodeIp := c.Query("node_ip")
+	podIp := c.Query("pod_ip")
+
+	clusterId, err := strconv.ParseInt(c.Param("clusterId"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gf_cluster.NewFailedResponse("should assign cluster id"))
+		return
+	}
+	pageNumber, pageSize := helper.GetPagerParamFromQuery(c)
+
+	result, total, err := model.ListPodByClusterIdFromDB(podIp, nodeIp, clusterId, pageNumber, pageSize)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gf_cluster.NewFailedResponse(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, gf_cluster.NewListClusterPodsDetailResponse(result, gf_cluster.Pager{
+		PageNumber: pageNumber,
+		PageSize:   pageSize,
+		Total:      total,
 	}))
 }
