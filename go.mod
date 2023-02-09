@@ -9,7 +9,7 @@ require (
 	github.com/alibabacloud-go/vpc-20160428/v2 v2.0.0
 	github.com/allegro/bigcache v1.2.1
 	github.com/gin-contrib/pprof v1.3.0
-	github.com/gin-gonic/gin v1.7.6
+	github.com/gin-gonic/gin v1.7.7
 	github.com/google/go-cmp v0.5.5
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.71
 	github.com/json-iterator/go v1.1.12
